@@ -15,7 +15,7 @@ app.use(cors());
 
 app.listen(port, async () => {
   await mongoose.connect(process.env.MONGODB_CON!);
-  console.log(`App running on http://localhost:${port}`);
+  console.log(`App running on port:${port}`);
 });
 
 app.get('/servers', async (req: Request<{}, {}, {}, { ip: string }>, res: Response) => {
