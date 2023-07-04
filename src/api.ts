@@ -1,12 +1,12 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import 'dotenv/config';
 import cors from 'cors';
 import axios from 'axios';
 import { generateServerListener } from './listener';
 import { IServerListData, IServerListener } from './ts/types';
 import mongoose from 'mongoose';
-import { ServerModel } from './db/models/ServerModel';
-import { createServer, createServerSnapshot } from './db/utils';
+import { createServer, createServerSnapshot } from './services/servers';
+import router from './routes/servers.router';
 
 const port = process.env.PORT!;
 
@@ -14,25 +14,11 @@ const app = express();
 app.use(cors());
 
 app.listen(port, async () => {
-  await mongoose.connect(process.env.MONGODB_CON!);
-  console.log(`App running on http://localhost:${port}`);
+  await mongoose.connect(process.env.MONGODB_CON!).catch(err => console.log(err));
+  console.log(`App running on port:${port}`);
 });
 
-app.get('/servers', async (req: Request<{}, {}, {}, { ip: string }>, res: Response) => {
-  const exclude = {
-    _id: 0,
-    __v: 0,
-    expiresAt: 0,
-  };
-  const ip = req.query.ip;
-  if (ip) {
-    const result = await ServerModel.findOne({ address: ip }, { _id: 0, __v: 0 }).populate('snapshots', exclude);
-    res.json(result);
-  } else {
-    const result = await ServerModel.find({}, { _id: 0, __v: 0 }).populate('snapshots', exclude);
-    res.json(result);
-  }
-});
+app.use('/servers', router);
 
 const fetchServerList = async () => {
   const ipList = await axios

@@ -8,7 +8,7 @@ const ServerSnapshotSchema = new mongoose.Schema(
     timestamp: Number,
     expiresAt: {
       type: Date,
-      default: () => new Date(new Date().getTime() + 2628000000),
+      default: () => new Date(new Date().getTime() + 604800000),
     },
   },
   { collection: 'servers_snapshots' }
