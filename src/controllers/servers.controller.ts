@@ -7,9 +7,9 @@ const exclude = {
   expiresAt: 0,
 };
 
-const getServers: RequestHandler<unknown, unknown, unknown, { limit: number }> = async (req, res) => {
-  const limit = req.query.limit;
-  const result = await ServerModel.find({}, exclude).populate({
+const getServers: RequestHandler<unknown, unknown, unknown, { group: string; limit: number }> = async (req, res) => {
+  const { group, limit } = req.query;
+  const result = await ServerModel.find(group ? { group: group } : {}, exclude).populate({
     path: 'snapshots',
     select: exclude,
     perDocumentLimit: limit,
