@@ -3,37 +3,34 @@ interface IServerListData {
   address: string[];
 }
 
-interface IServerListInfo {
+interface IServerListEntry {
   group: string;
   ip: string;
   port: number;
 }
 
 interface IServerListener {
-  getData(): Promise<IServerListenerData>;
+  getData(): Promise<IServer>;
 }
 
-interface IServerListenerData extends IServerListenerInfo {
-  snapshot?: IServerListenerSnapshot;
-}
-
-interface IServerListenerInfo {
+interface IServer {
   address: string;
   group: string;
-  serverName?: string;
-  build?: number;
-  versionType?: string;
-  gameMode?: string;
-  playerLimit?: number;
-  description?: string;
-  modeName?: string;
+  name: string;
+  snapshot?: IServerSnapshot;
+  build: number;
+  version: string;
+  gamemode: string;
+  limit: number;
+  description: string;
+  mode: string;
 }
 
-interface IServerListenerSnapshot {
-  mapName: string;
+interface IServerSnapshot {
+  map: string;
   players: number;
   wave: number;
   timestamp: number;
 }
 
-export { IServerListData, IServerListInfo, IServerListener, IServerListenerData, IServerListenerInfo, IServerListenerSnapshot };
+export { IServerListData, IServerListEntry, IServerListener, IServer, IServerSnapshot };

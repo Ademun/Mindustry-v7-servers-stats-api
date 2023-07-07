@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const ServerSnapshotSchema = new mongoose.Schema(
   {
-    mapName: String,
+    map: String,
     players: Number,
     wave: Number,
     timestamp: Number,

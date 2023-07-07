@@ -4,7 +4,7 @@ const ServerSchema = new mongoose.Schema(
   {
     address: String,
     group: String,
-    serverName: String,
+    name: String,
     snapshots: [
       {
         type: Types.ObjectId,
@@ -12,11 +12,11 @@ const ServerSchema = new mongoose.Schema(
       },
     ],
     build: Number,
-    versionType: String,
-    gameMode: String,
-    playerLimit: Number,
+    version: String,
+    gamemode: String,
+    limit: Number,
     description: String,
-    modeName: String,
+    mode: String,
   },
   { collection: 'servers' }
 );

@@ -14,7 +14,7 @@ const getServers: RequestHandler<unknown, unknown, unknown, { group: string; lim
     select: exclude,
     perDocumentLimit: limit,
   });
-  res.json(result);
+  result ? res.json(result) : res.status(404).send('Not found');
 };
 
 const getServer: RequestHandler<{ ip: string }, unknown, unknown, { limit: number }> = async (req, res) => {
@@ -25,7 +25,7 @@ const getServer: RequestHandler<{ ip: string }, unknown, unknown, { limit: numbe
     select: exclude,
     perDocumentLimit: limit,
   });
-  res.json(result);
+  result ? res.json(result) : res.status(404).send('Not found');
 };
 
 export { getServers, getServer };

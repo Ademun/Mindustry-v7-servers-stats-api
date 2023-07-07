@@ -1,11 +1,11 @@
 import { createSocket } from 'dgram';
-import { IServerListInfo, IServerListener, IServerListenerData } from './ts/types';
+import { IServerListEntry, IServerListener, IServer } from './ts/types';
 
-export const generateServerListener = (server: IServerListInfo): IServerListener => {
+export const generateServerListener = (server: IServerListEntry): IServerListener => {
   const requestBuffer = Buffer.from([-2, 1]);
   const socket = createSocket('udp4');
   return {
-    getData: async (): Promise<IServerListenerData> => {
+    getData: async (): Promise<IServer> => {
       socket.send(requestBuffer, server.port, server.ip, () => {});
 
       const response = await new Promise((resolve, reject) => {
@@ -24,6 +24,13 @@ export const generateServerListener = (server: IServerListInfo): IServerListener
         return {
           address: `${server.ip}:${server.port}`,
           group: server.group,
+          name: 'N / A',
+          build: 0,
+          version: 'N / A',
+          gamemode: 'N / A',
+          limit: 0,
+          description: 'N / A',
+          mode: 'N / A',
         };
       }
       const decodingGenerator = decodeDataGenerator(response);
@@ -31,19 +38,19 @@ export const generateServerListener = (server: IServerListInfo): IServerListener
       return {
         address: `${server.ip}:${server.port}`,
         group: server.group,
-        serverName: decodingGenerator.next('string'),
+        name: decodingGenerator.next('string'),
         snapshot: {
-          mapName: decodingGenerator.next('string'),
+          map: decodingGenerator.next('string'),
           players: decodingGenerator.next('int'),
           wave: decodingGenerator.next('int'),
           timestamp: roundDate(new Date()).getTime(),
         },
         build: decodingGenerator.next('int'),
-        versionType: decodingGenerator.next('string'),
-        gameMode: decodingGenerator.next('byte'),
-        playerLimit: decodingGenerator.next('int'),
+        version: decodingGenerator.next('string'),
+        gamemode: decodingGenerator.next('byte'),
+        limit: decodingGenerator.next('int'),
         description: decodingGenerator.next('string'),
-        modeName: decodingGenerator.next('string'),
+        mode: decodingGenerator.next('string'),
       };
     },
   };
